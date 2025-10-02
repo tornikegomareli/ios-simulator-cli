@@ -64,7 +64,7 @@ if response["success"]:
 
 ### Automatic Discovery & Usage
 
-AI agents like Claude, ChatGPT, and others can automatically discover and use this CLI by reading a simple specification file. Just add a `CLAUDE.md` file (or similar agent spec file) to your project root:
+AI agents like Claude, Codex, and others can automatically discover and use this CLI by reading a simple specification file. Just add a `CLAUDE.md` file (or similar agent spec file) to your project root:
 
 #### Example: CLAUDE.md
 ```markdown
