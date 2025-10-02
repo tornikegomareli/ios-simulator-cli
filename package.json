@@ -1,6 +1,6 @@
 {
   "name": "ios-simulator-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A powerful command-line interface for iOS Simulator automation",
   "keywords": [
     "ios",
