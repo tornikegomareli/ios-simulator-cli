@@ -21,7 +21,6 @@ const version = packageJson.version;
 const logger = createLogger();
 const program = new Command();
 
-// Global configuration
 program
   .name('sim-cli')
   .description('iOS Simulator CLI - A powerful command-line interface for iOS Simulator automation')
@@ -55,7 +54,6 @@ program
     }
   });
 
-// Simulator Management Commands
 program
   .command('info')
   .description('Get information about the currently booted simulator')
@@ -94,7 +92,6 @@ program
     }
   });
 
-// UI Interaction Commands
 program
   .command('tap <x> <y>')
   .description('Tap at specific screen coordinates')
@@ -154,7 +151,6 @@ program
     }
   });
 
-// UI Inspection Commands
 program
   .command('inspect')
   .description('Get the complete accessibility tree of the current screen')
@@ -198,7 +194,6 @@ program
     }
   });
 
-// Media Capture Commands
 program
   .command('screenshot [path]')
   .description('Take a screenshot of the simulator')
@@ -239,7 +234,6 @@ program
     }
   });
 
-// App Management Commands
 program
   .command('install <app-path>')
   .description('Install an app on the simulator')
@@ -285,7 +279,6 @@ program
     }
   });
 
-// Push Notification Commands
 program
   .command('notify <bundle-id>')
   .description('Send a push notification to an app')
@@ -374,7 +367,6 @@ program
     }
   });
 
-// Advanced Commands
 program
   .command('batch <script-file>')
   .description('Execute multiple commands from a script file')
@@ -382,7 +374,6 @@ program
   .action(async (scriptFile: string, options) => {
     try {
       logger.info('Batch command not yet implemented');
-      // TODO: Implement batch execution
     } catch (error) {
       handleError(error);
     }
@@ -396,7 +387,6 @@ program
   .action(async (command: string, options) => {
     try {
       logger.info('Watch command not yet implemented');
-      // TODO: Implement watch functionality
     } catch (error) {
       handleError(error);
     }
@@ -408,23 +398,18 @@ program
   .action(async (action: string, key?: string, value?: string) => {
     try {
       logger.info('Config command not yet implemented');
-      // TODO: Implement configuration management
     } catch (error) {
       handleError(error);
     }
   });
 
-// Error handling for unknown commands
 program.on('command:*', () => {
   console.error(chalk.red(`\nError: Unknown command '${program.args.join(' ')}'`));
   console.log(chalk.yellow('\nRun `sim-cli --help` for a list of available commands'));
   process.exit(1);
 });
 
-// Parse command line arguments
 program.parse(process.argv);
-
-// Show help if no arguments provided
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }

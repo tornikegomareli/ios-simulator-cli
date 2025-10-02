@@ -11,33 +11,27 @@ export function resolveFilePath(filePath: string): string {
     return filePath;
   }
 
-  // Handle ~/something paths
   if (filePath.startsWith('~/')) {
     return path.join(os.homedir(), filePath.slice(2));
   }
 
-  // Determine the default directory from env var or fallback to ~/Downloads
   let defaultDir = path.join(os.homedir(), 'Downloads');
   const customDefaultDir = process.env.SIM_CLI_OUTPUT_DIR;
 
   if (customDefaultDir) {
-    // Also expand tilde for the custom directory path
     if (customDefaultDir.startsWith('~/')) {
       defaultDir = path.join(os.homedir(), customDefaultDir.slice(2));
     } else if (path.isAbsolute(customDefaultDir)) {
       defaultDir = customDefaultDir;
     } else {
-      // Relative to current working directory
       defaultDir = path.resolve(customDefaultDir);
     }
   }
 
-  // Ensure the default directory exists
   if (!fs.existsSync(defaultDir)) {
     fs.mkdirSync(defaultDir, { recursive: true });
   }
 
-  // Join the relative filePath with the resolved default directory
   return path.join(defaultDir, filePath);
 }
 

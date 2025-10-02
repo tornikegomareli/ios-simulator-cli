@@ -41,7 +41,6 @@ export async function open(options: {
   logger.startSpinner('Opening iOS Simulator...');
 
   try {
-    // If specific device requested, boot it first
     if (options.deviceType || options.ios) {
       const devices = await listDevices({
         ...(options.ios && { iosVersion: options.ios }),
@@ -56,7 +55,6 @@ export async function open(options: {
         );
       }
 
-      // Boot the first matching device if not already booted
       const device = devices[0];
       if (device && device.state !== 'Booted') {
         logger.updateSpinner(`Booting ${device.name}...`);
@@ -64,7 +62,6 @@ export async function open(options: {
       }
     }
 
-    // Open the Simulator app
     await run('open', ['-a', 'Simulator.app']);
 
     logger.success('iOS Simulator opened successfully');
@@ -108,7 +105,6 @@ export async function list(options: {
     } else {
       logger.success(`Found ${devices.length} simulator(s)`);
 
-      // Group by runtime for better display
       const grouped = devices.reduce((acc, device) => {
         const runtime = device.runtimeIdentifier.split('.').pop() || 'Unknown';
         if (!acc[runtime]) acc[runtime] = [];

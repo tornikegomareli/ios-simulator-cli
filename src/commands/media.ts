@@ -25,7 +25,6 @@ export async function screenshot(
   const deviceId = await getDeviceId(options.device);
   const fileType = options.type || 'png';
 
-  // Generate or resolve output path
   const outputPath = resolveFilePath(
     path || generateTimestampedFilename('screenshot', fileType)
   );
@@ -49,12 +48,10 @@ export async function screenshot(
       args.push(`--mask=${options.mask}`);
     }
 
-    // ALWAYS use -- separator before user input (file path)
     args.push('--', outputPath);
 
     const { stderr } = await run('xcrun', args);
 
-    // xcrun simctl screenshot outputs to stderr on success
     if (stderr && !stderr.includes('Wrote screenshot to')) {
       throw new SimulatorError(`Screenshot failed: ${stderr}`, ErrorCode.GENERAL_ERROR);
     }
@@ -90,12 +87,10 @@ export async function record(
 ): Promise<void> {
   const deviceId = await getDeviceId(options.device);
 
-  // Generate or resolve output path
   const outputPath = resolveFilePath(
     path || generateTimestampedFilename('recording', 'mp4')
   );
 
-  // Check if file exists and force flag not set
   if (fileExists(outputPath) && !options.force) {
     throw new SimulatorError(
       `File already exists: ${outputPath}`,
@@ -127,16 +122,13 @@ export async function record(
       args.push('--force');
     }
 
-    // ALWAYS use -- separator before user input (file path)
     args.push('--', outputPath);
 
-    // Start recording in the background
     const recordingProcess = runBackground('xcrun', args);
 
     let recordingStarted = false;
     let errorOutput = '';
 
-    // Listen for recording start confirmation
     recordingProcess.stderr?.on('data', (data) => {
       const message = data.toString();
       if (message.includes('Recording started')) {
@@ -146,7 +138,6 @@ export async function record(
       }
     });
 
-    // Wait for recording to start (max 3 seconds)
     await new Promise<void>((resolve, reject) => {
       const checkInterval = setInterval(() => {
         if (recordingStarted) {
@@ -164,7 +155,6 @@ export async function record(
               ErrorCode.GENERAL_ERROR
             ));
           } else {
-            // Assume it started even without confirmation
             resolve();
           }
         }
@@ -174,7 +164,6 @@ export async function record(
     logger.success(`Recording started. Video will be saved to: ${outputPath}`);
     logger.info('Run "sim-cli record-stop" to stop recording');
 
-    // Store the recording info for later
     process.env.SIM_CLI_RECORDING_PATH = outputPath;
     process.env.SIM_CLI_RECORDING_PID = String(recordingProcess.pid);
 
@@ -200,10 +189,8 @@ export async function recordStop(): Promise<void> {
   logger.startSpinner('Stopping video recording...');
 
   try {
-    // Kill the recording process
     await killProcess('simctl.*recordVideo');
 
-    // Wait a moment for the video to finalize
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const recordingPath = process.env.SIM_CLI_RECORDING_PATH;
@@ -229,13 +216,11 @@ export async function recordStop(): Promise<void> {
       }
     }
 
-    // Clean up environment variables
     delete process.env.SIM_CLI_RECORDING_PATH;
     delete process.env.SIM_CLI_RECORDING_PID;
   } catch (error) {
     logger.stopSpinner(false);
 
-    // If no recording was active, that's not necessarily an error
     if (error instanceof Error && error.message.includes('No matching processes')) {
       logger.warn('No active recording found');
 

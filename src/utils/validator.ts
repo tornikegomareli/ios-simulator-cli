@@ -6,7 +6,6 @@ import { z } from 'zod';
  */
 export const UDID_REGEX = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;
 
-// Common schemas
 export const udidSchema = z.string().regex(UDID_REGEX, 'Invalid UDID format');
 
 export const coordinateSchema = z.object({
@@ -27,7 +26,6 @@ export const bundleIdSchema = z.string()
   .max(256, 'Bundle ID is too long (max 256 characters)')
   .regex(/^[a-zA-Z0-9.-]+$/, 'Invalid bundle ID format');
 
-// Command-specific schemas
 export const tapOptionsSchema = z.object({
   duration: durationSchema.optional(),
   device: udidSchema.optional(),
@@ -61,5 +59,5 @@ export const hardwareButtonSchema = z.enum([
   'volume-down',
   'ringer',
   'power',
-  'home+lock', // Screenshot gesture
+  'home+lock',
 ]);

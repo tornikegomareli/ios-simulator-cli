@@ -38,7 +38,6 @@ export async function tap(
       args.push('--duration', duration);
     }
 
-    // ALWAYS use -- separator before user input
     args.push('--', String(x), String(y));
 
     const { stderr } = await run('idb', args);
@@ -71,7 +70,6 @@ export async function type(text: string, options: { device?: string } = {}): Pro
     const args = [
       'ui', 'text',
       '--udid', deviceId,
-      // ALWAYS use -- separator before user input
       '--', validatedText
     ];
 
@@ -122,7 +120,6 @@ export async function swipe(
       args.push('--delta', String(options.delta));
     }
 
-    // ALWAYS use -- separator before user input
     args.push('--', String(x1), String(y1), String(x2), String(y2));
 
     const { stderr } = await run('idb', args);
@@ -152,11 +149,9 @@ export async function press(button: string, options: { device?: string } = {}): 
   logger.startSpinner(`Pressing ${button} button...`);
 
   try {
-    // Handle button combinations
     if (validatedButton.includes('+')) {
       const buttons = validatedButton.split('+');
 
-      // Special case for screenshot gesture
       if (buttons.includes('home') && buttons.includes('lock')) {
         await run('xcrun', ['simctl', 'io', deviceId, 'screenshot', '--type=png']);
         logger.success('Screenshot gesture performed');
@@ -167,7 +162,6 @@ export async function press(button: string, options: { device?: string } = {}): 
         );
       }
     } else {
-      // Map button names to simctl commands
       const buttonMap: Record<string, string[]> = {
         'home': ['ui', 'button', '--udid', deviceId, '--', 'HOME'],
         'lock': ['ui', 'button', '--udid', deviceId, '--', 'LOCK'],
@@ -227,21 +221,17 @@ export async function inspect(options: {
 
     const data = JSON.parse(stdout);
 
-    // Save to file if requested
     if (options.output) {
       const outputPath = path.resolve(options.output);
       writeFile(outputPath, JSON.stringify(data, null, 2));
       logger.success(`Accessibility tree saved to: ${outputPath}`);
     }
 
-    // Format output
     if (process.env.SIM_CLI_FORMAT === 'json' || format === 'json') {
       logger.json(data);
     } else if (format === 'tree') {
-      // TODO: Implement tree visualization
       console.log(JSON.stringify(data, null, 2));
     } else if (format === 'table') {
-      // TODO: Implement table format
       console.log(JSON.stringify(data, null, 2));
     }
   } catch (error) {
@@ -267,7 +257,6 @@ export async function inspectPoint(
       'ui', 'describe-point',
       '--udid', deviceId,
       '--json',
-      // ALWAYS use -- separator before user input
       '--', String(x), String(y)
     ]);
 
@@ -307,19 +296,16 @@ export async function view(options: {
   logger.startSpinner('Capturing screen...');
 
   try {
-    // Create temp directory
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sim-cli-'));
     const tempPng = path.join(tmpDir, 'screen.png');
     const tempOutput = path.join(tmpDir, `screen.${format}`);
 
-    // Capture screenshot as PNG first
     await run('xcrun', [
       'simctl', 'io', deviceId,
       'screenshot', '--type=png',
       '--', tempPng
     ]);
 
-    // Get screen dimensions
     const { stdout: uiOutput } = await run('idb', [
       'ui', 'describe-all',
       '--udid', deviceId,
@@ -330,7 +316,6 @@ export async function view(options: {
     const frame = uiData[0]?.frame;
 
     if (frame && format === 'jpeg') {
-      // Convert to JPEG with compression
       await run('sips', [
         '-z', String(frame.height), String(frame.width),
         '-s', 'format', 'jpeg',
@@ -339,11 +324,9 @@ export async function view(options: {
         '--out', tempOutput
       ]);
     } else {
-      // Use PNG as-is
       fs.copyFileSync(tempPng, tempOutput);
     }
 
-    // Save to file or output base64
     if (options.output) {
       const outputPath = path.resolve(options.output);
       fs.copyFileSync(tempOutput, outputPath);
@@ -365,7 +348,6 @@ export async function view(options: {
       }
     }
 
-    // Cleanup temp files
     fs.rmSync(tmpDir, { recursive: true });
   } catch (error) {
     logger.stopSpinner(false);

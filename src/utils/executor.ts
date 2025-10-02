@@ -67,7 +67,6 @@ export async function killProcess(pattern: string): Promise<void> {
   try {
     await run('pkill', ['-SIGINT', '-f', pattern]);
   } catch (error: any) {
-    // pkill returns 1 if no processes were matched, which is OK
     if (error.code !== 1) {
       throw error;
     }
