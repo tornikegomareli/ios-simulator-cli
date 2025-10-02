@@ -2,8 +2,8 @@
 
 > 🚀 A powerful, LLM-friendly command-line interface for iOS Simulator automation - simpler, faster, and more reliable than MCP servers.
 
-[![npm version](https://img.shields.io/npm/v/ios-simulator-cli)](https://www.npmjs.com/package/ios-simulator-cli)
-[![CI Status](https://github.com/yourusername/ios-simulator-cli/workflows/CI/badge.svg)](https://github.com/yourusername/ios-simulator-cli/actions)
+[![npm version](https://img.shields.io/npm/v/ios-simulator-cli.svg)](https://www.npmjs.com/package/ios-simulator-cli)
+[![npm downloads](https://img.shields.io/npm/dm/ios-simulator-cli.svg)](https://www.npmjs.com/package/ios-simulator-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🤖 Designed for AI Agents & LLMs
