@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/ios-simulator-cli.svg)](https://www.npmjs.com/package/ios-simulator-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🤖 Designed for AI Agents & LLMs
+## Designed for AI Agents & LLMs
 
 This CLI is specifically optimized for integration with AI agents and Large Language Models (LLMs):
 
@@ -59,48 +59,11 @@ response = execute_simulator_command(
 if response["success"]:
     print(f"Notification sent at {response['timestamp']}")
 ```
-
-## Why CLI over MCP?
-
-While MCP (Model Context Protocol) servers are powerful, CLI tools offer distinct advantages for automation and AI agent integration:
-
-### ✅ **Simplicity**
-- **No server management**: Just run commands, get results
-- **Zero configuration**: Works out of the box
-- **Standard I/O**: Use pipes, redirects, and standard UNIX tools
-
-### 🔧 **Better Integration**
-- **Universal compatibility**: Any programming language can execute shell commands
-- **CI/CD friendly**: Perfect for GitHub Actions, Jenkins, CircleCI
-- **Script-ready**: Compose commands in bash, Python, or any scripting language
-
-### 🎯 **AI Agent Friendly**
-- **Discrete actions**: Each command is atomic and predictable
-- **Clear boundaries**: No persistent state or session management
-- **Easy to test**: Mock commands for reliable agent training
-- **Tool calling**: Maps perfectly to function/tool calling in LLMs
-
-### ⚡ **Performance**
-- **Minimal overhead**: No protocol encoding/decoding
-- **Direct execution**: Commands run immediately without server roundtrip
-- **Resource efficient**: No background processes consuming memory
-
-### 🔒 **Security**
-- **Process isolation**: Each command runs in its own process
-- **No attack surface**: No server ports or persistent connections
-- **Audit-friendly**: Every action is a discrete command in logs
-
 ## Installation
 
 ### Via npm (Recommended)
 ```bash
 npm install -g ios-simulator-cli
-```
-
-### Via Homebrew
-```bash
-brew tap yourusername/ios-simulator-cli
-brew install ios-simulator-cli
 ```
 
 ### From Source
@@ -115,7 +78,6 @@ npm link
 ## Prerequisites
 
 - **macOS** 12.0 or later
-- **Xcode** 14.0 or later (with iOS Simulator)
 - **Node.js** 18.0 or later
 - **Facebook IDB** (iOS Debug Bridge)
 
@@ -759,18 +721,6 @@ npm test -- --coverage
 npm test -- --watch
 ```
 
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Write tests for your changes
-4. Ensure all tests pass (`npm test`)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
 ## Troubleshooting
 
 ### Simulator not found
@@ -829,17 +779,3 @@ sudo xcode-select --reset
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
-
-## Credits
-
-Built on top of excellent tools:
-- Apple's `xcrun simctl`
-- Facebook's [IDB](https://github.com/facebook/idb)
-- Inspired by [ios-simulator-mcp](https://github.com/joshuayoes/ios-simulator-mcp)
-
-## Support
-
-- 📧 Email: support@example.com
-- 💬 Discord: [Join our community](https://discord.gg/example)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/ios-simulator-cli/issues)
-- 📖 Docs: [Full Documentation](https://docs.example.com)
