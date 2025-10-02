@@ -59,6 +59,85 @@ response = execute_simulator_command(
 if response["success"]:
     print(f"Notification sent at {response['timestamp']}")
 ```
+
+## 🤖 AI Agent Integration
+
+### Automatic Discovery & Usage
+
+AI agents like Claude, ChatGPT, and others can automatically discover and use this CLI by reading a simple specification file. Just add a `CLAUDE.md` file (or similar agent spec file) to your project root:
+
+#### Example: CLAUDE.md
+```markdown
+# iOS Simulator Automation
+
+This project has iOS Simulator CLI installed for automated testing.
+
+## Available Commands
+
+- `sim-cli tap <x> <y>` - Tap at coordinates
+- `sim-cli swipe <x1> <y1> <x2> <y2>` - Swipe gesture
+- `sim-cli type "<text>"` - Type text into focused field
+- `sim-cli screenshot [path]` - Take a screenshot
+- `sim-cli record start/stop` - Record video
+- `sim-cli install <app-path>` - Install an app
+- `sim-cli launch <bundle-id>` - Launch an app
+- `sim-cli notify <bundle-id> --title "<title>" --body "<body>"` - Send push notification
+
+## Usage Examples
+
+To test the login flow:
+1. Launch app: `sim-cli launch com.myapp.ios`
+2. Tap username field: `sim-cli tap 200 300`
+3. Type username: `sim-cli type "testuser@example.com"`
+4. Tap password field: `sim-cli tap 200 400`
+5. Type password: `sim-cli type "password123"`
+6. Tap login button: `sim-cli tap 200 500`
+7. Take screenshot: `sim-cli screenshot login-success.png`
+```
+
+### How Agents Use It
+
+When an AI agent encounters tasks like "test the iOS app login flow" or "take a screenshot of the app", it will:
+
+1. **Read the spec file** to understand available commands
+2. **Plan the automation** sequence needed
+3. **Execute commands** step by step
+4. **Verify results** using machine-readable output
+
+#### Real Example with Claude
+
+```markdown
+User: "Test if the app's notification system works"
+
+Claude: I'll test the notification system for you. Let me:
+1. First check if a simulator is running
+2. Send a test notification
+3. Take a screenshot to verify
+
+[Executes automatically:]
+$ sim-cli info --json
+$ sim-cli notify com.myapp.ios --title "Test Alert" --body "This is a test notification"
+$ sim-cli screenshot notification-test.png
+
+✅ Notification sent successfully and screenshot saved.
+```
+
+### Creating Your Own Agent Spec
+
+For other AI agents or automation tools, create a spec file with:
+
+1. **Command inventory** - List all available sim-cli commands
+2. **Common workflows** - Provide task-specific command sequences
+3. **Context hints** - Explain when to use each command
+4. **Output format** - Specify `--json` for machine parsing
+
+Example spec files:
+- `CLAUDE.md` - For Anthropic's Claude
+- `cursor-rules.md` - For Cursor IDE
+- `.github/copilot-instructions.md` - For GitHub Copilot
+- `aider.md` - For Aider AI assistant
+- `.ai/commands.yaml` - Generic YAML format
+
 ## Installation
 
 ### Via npm (Recommended)
