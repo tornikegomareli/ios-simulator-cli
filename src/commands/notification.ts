@@ -1,5 +1,5 @@
-import { execCommand, execCommandBackground } from '../utils/executor';
-import { validateBundleId } from '../utils/validator';
+import { run, runBackground } from '../utils/executor';
+import { bundleIdSchema } from '../utils/validator';
 import { getDeviceId } from '../utils/device';
 import { createLogger } from '../utils/logger';
 import * as fs from 'fs';
@@ -44,7 +44,7 @@ interface NotificationOptions {
 export async function sendNotification(bundleId: string, options: NotificationOptions = {}): Promise<void> {
   try {
     // Validate bundle ID
-    validateBundleId(bundleId);
+    bundleIdSchema.parse(bundleId);
 
     // Get device ID
     const deviceId = await getDeviceId();
@@ -97,14 +97,12 @@ export async function sendNotification(bundleId: string, options: NotificationOp
 
     try {
       // Send notification using simctl
-      const args = [
-        'xcrun', 'simctl', 'push',
+      const result = await run('xcrun', [
+        'simctl', 'push',
         deviceId,
         bundleId,
         tmpFile
-      ];
-
-      const result = await execCommand(args);
+      ]);
 
       // Clean up temp file
       fs.unlinkSync(tmpFile);
@@ -122,8 +120,8 @@ export async function sendNotification(bundleId: string, options: NotificationOp
       } else if (!process.env.SIM_CLI_QUIET) {
         logger.success('Push notification sent successfully');
         if (process.env.SIM_CLI_VERBOSE) {
-          logger.info('Bundle ID:', bundleId);
-          logger.info('Payload:', JSON.stringify(payload, null, 2));
+          logger.info(`Bundle ID: ${bundleId}`);
+          logger.info(`Payload: ${JSON.stringify(payload, null, 2)}`);
         }
       }
     } catch (error) {

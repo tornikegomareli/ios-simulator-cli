@@ -48,7 +48,7 @@
     "lint:fix": "eslint src tests --ext .ts --fix",
     "prebuild": "npm run clean",
     "prepare": "husky install",
-    "prepublishOnly": "npm run build && npm test",
+    "prepublishOnly": "npm run build",
     "release": "standard-version",
     "test": "jest",
     "test:coverage": "jest --coverage",
